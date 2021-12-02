@@ -10,8 +10,8 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 
     // TODO 2: Use the m_Model.FindClosestNode method to find the closest nodes to the starting and ending coordinates.
     // Store the nodes you find in the RoutePlanner's start_node and end_node attributes.
-    start_node = &m_Model.FindClosestNode(start_x, start_y);
-    end_node = &m_Model.FindClosestNode(end_x, end_y);
+    start_node = &(m_Model.FindClosestNode(start_x, start_y));
+    end_node = &(m_Model.FindClosestNode(end_x, end_y));
 }
 
 
@@ -39,7 +39,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
         node->parent = current_node;
         node->h_value = CalculateHValue(node);
         node->g_value = current_node->g_value + current_node->distance(*node);
-        open_list.push_back(node);
+        open_list.emplace_back(node);
         node->visited = true;
     }
     
@@ -109,7 +109,5 @@ void RoutePlanner::AStarSearch() {
 }
 
 bool RoutePlanner::Compare(const RouteModel::Node *node_one, const RouteModel::Node *node_two) {
-  float f1 = node_one->g_value + node_one->h_value;
-  float f2 = node_two->g_value + node_two->h_value; 
-  return f1 > f2; 
+    return (node_one->g_value + node_one->h_value) > (node_two->g_value + node_two->h_value);
 }

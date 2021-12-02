@@ -10,6 +10,37 @@
 
 using namespace std::experimental;
 
+// Input boundary check
+float input_check(){
+	float temp = 0;
+	bool validity;
+	enter: std::cin>>temp;
+	if (temp>=0 || temp <=100){
+		validity = true;
+	}
+	else{
+		std::cout<<"\nEnter values between 0 and 100"<<std::endl;
+		validity = false;
+	}
+	if (validity) return temp;
+	else goto enter;
+}
+
+// Input by User
+std::vector<float> user_input(){
+	std::vector<float> in;
+	std::cout<<"Input starting x-coordinate: ";
+	in.embrace_back(input_check());
+	std::cout<<"Input starting y-coordinate: ";
+	in.embrace_back(input_check());
+	std::cout<<"Input finishing x-coordinate: ";
+	in.embrace_back(input_check());
+	std::cout<<"Input finishing y-coordinate: ";
+	in.embrace_back(input_check());
+	return in;
+}
+		
+
 static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
 {   
     std::ifstream is{path, std::ios::binary | std::ios::ate};
@@ -56,13 +87,13 @@ int main(int argc, const char **argv)
     // TODO 1: Declare floats `start_x`, `start_y`, `end_x`, and `end_y` and get
     // user input for these values using std::cin. Pass the user input to the
     // RoutePlanner object below in place of 10, 10, 90, 90.
-    float start_x, start_y, end_x, end_y;
-    std::cin>>start_x>>start_y>>end_x>>end_y;
+	std::vector<float> input_coordinates;
+	input_coordinates = user_input();
     // Build Model.
     RouteModel model{osm_data};
 
     // Create RoutePlanner object and perform A* search.
-    RoutePlanner route_planner{model, start_x, start_y, end_x, end_y};
+    RoutePlanner route_planner{model, input_coordinates[0], input_coordinates[1], input_coordinates[2], input_coordinates[3]};
     route_planner.AStarSearch();
 
     std::cout << "Distance: " << route_planner.GetDistance() << " meters. \n";
